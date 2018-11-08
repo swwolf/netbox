@@ -114,9 +114,17 @@
                     <td>802.1Q Mode</td>
                     <td>{{ interface.get_mode_display }}</td>
                 </tr>
+                {% if interface.inventory_item %}
+                <tr>
+                    <td>Inventory Item</td>
+                    <td>
+                        <a href="{% url 'dcim:device_inventory' pk=interface.device.pk %}">{{ interface.inventory_item }} {{ interface.inventory_item.serial }}</a>
+                    </td>
+                </tr>
+                {% endif %}
             </table>
         </div>
-        {% include 'extras/inc/tags_panel.html' with tags=interface.tags.all %}
+	{% include 'extras/inc/tags_panel.html' with tags=interface.tags.all %}
     </div>
 	<div class="col-md-6">
         {% if interface.is_connectable %}

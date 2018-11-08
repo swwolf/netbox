@@ -1328,7 +1328,7 @@ class ConsolePortConnectionForm(BootstrapMixin, ChainedFieldsMixin, forms.ModelF
         label='Port',
         widget=APISelect(
             api_url='/api/dcim/console-server-ports/?device_id={{console_server}}',
-            disabled_indicator='is_connected',
+            disabled_indicator='connected_console',
         )
     )
 
@@ -1419,7 +1419,7 @@ class ConsoleServerPortConnectionForm(BootstrapMixin, ChainedFieldsMixin, forms.
         label='Port',
         widget=APISelect(
             api_url='/api/dcim/console-ports/?device_id={{device}}',
-            disabled_indicator='is_connected'
+            disabled_indicator='cs_port'
         )
     )
     connection_status = forms.BooleanField(
@@ -1597,7 +1597,7 @@ class PowerPortConnectionForm(BootstrapMixin, ChainedFieldsMixin, forms.ModelFor
         label='Outlet',
         widget=APISelect(
             api_url='/api/dcim/power-outlets/?device_id={{pdu}}',
-            disabled_indicator='is_connected'
+            disabled_indicator='connected_port'
         )
     )
 
@@ -1688,7 +1688,7 @@ class PowerOutletConnectionForm(BootstrapMixin, ChainedFieldsMixin, forms.Form):
         label='Port',
         widget=APISelect(
             api_url='/api/dcim/power-ports/?device_id={{device}}',
-            disabled_indicator='is_connected'
+            disabled_indicator='power_outlet'
         )
     )
     connection_status = forms.BooleanField(
@@ -1726,7 +1726,7 @@ class InterfaceForm(BootstrapMixin, forms.ModelForm):
         model = Interface
         fields = [
             'device', 'name', 'form_factor', 'enabled', 'lag', 'mac_address', 'mtu', 'mgmt_only', 'description',
-            'mode', 'untagged_vlan', 'tagged_vlans', 'tags',
+            'mode', 'untagged_vlan', 'tagged_vlans', 'tags', 'inventory_item'
         ]
         widgets = {
             'device': forms.HiddenInput(),
@@ -1869,6 +1869,7 @@ class InterfaceCreateForm(ComponentForm, forms.Form):
     description = forms.CharField(max_length=100, required=False)
     mode = forms.ChoiceField(choices=add_blank_choice(IFACE_MODE_CHOICES), required=False)
     tags = TagField(required=False)
+    inventory_item = forms.ModelChoiceField(queryset=InventoryItem.objects.all(), required=False, label='Inventory Item')
 
     def __init__(self, *args, **kwargs):
 
